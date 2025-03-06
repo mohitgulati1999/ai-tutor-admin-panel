@@ -1,9 +1,11 @@
 
 import { useState } from 'react';
-import { PlusCircle, X, Upload, ChevronDown, ChevronUp } from 'lucide-react';
+import { PlusCircle, X, Upload, ChevronDown, ChevronUp, Lightbulb } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
@@ -21,10 +23,20 @@ type Topic = {
   subTopics: SubTopic[];
 };
 
+// Prompt type options
+type PromptType = 'standard' | 'custom';
+
 const CourseForm = () => {
   const [courseTitle, setCourseTitle] = useState('');
   const [topics, setTopics] = useState<Topic[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // New state for prompt configuration
+  const [promptType, setPromptType] = useState<PromptType>('standard');
+  const [customPrompt, setCustomPrompt] = useState('');
+
+  // Default standard prompt text
+  const standardPrompt = "You are an AI trainer that helps students understand course material and answers questions based on the provided content. Be clear, concise, and helpful in your responses.";
 
   const addTopic = () => {
     setTopics([
@@ -133,6 +145,12 @@ const CourseForm = () => {
       }
     }
 
+    // If prompt type is custom, validate custom prompt
+    if (promptType === 'custom' && !customPrompt.trim()) {
+      toast.error('Please enter a custom prompt or use the standard prompt');
+      return;
+    }
+
     // Submit form
     setIsSubmitting(true);
     
@@ -140,13 +158,23 @@ const CourseForm = () => {
       // Simulating API call
       await new Promise(resolve => setTimeout(resolve, 1000));
       
+      // Prepare submission data including prompt
+      const finalPrompt = promptType === 'standard' ? standardPrompt : customPrompt;
+      
       // Here you would typically send the data to the backend
-      console.log('Course data:', { courseTitle, topics });
+      console.log('Course data:', { 
+        courseTitle, 
+        topics, 
+        promptType,
+        aiPrompt: finalPrompt 
+      });
       
       toast.success('Course created successfully');
       // Reset form after successful submission
       setCourseTitle('');
       setTopics([]);
+      setPromptType('standard');
+      setCustomPrompt('');
     } catch (error) {
       toast.error('Failed to create course');
       console.error(error);
@@ -171,6 +199,73 @@ const CourseForm = () => {
               placeholder="Enter course title"
               className="max-w-md"
             />
+          </div>
+        </div>
+      </div>
+
+      {/* New AI Prompt Configuration section */}
+      <div className="glass-card p-6">
+        <div className="flex items-center gap-2 mb-4">
+          <Lightbulb className="h-5 w-5 text-primary" />
+          <h2 className="text-xl font-semibold">AI Trainer Prompt</h2>
+        </div>
+        
+        <div className="space-y-4">
+          <RadioGroup 
+            value={promptType} 
+            onValueChange={(value) => setPromptType(value as PromptType)}
+            className="space-y-3"
+          >
+            <div className="flex items-start space-x-2">
+              <RadioGroupItem value="standard" id="standard-prompt" />
+              <div className="grid gap-1.5">
+                <Label htmlFor="standard-prompt" className="font-medium">
+                  Use Standard Prompt
+                </Label>
+                <p className="text-sm text-muted-foreground">
+                  The AI trainer will use the following default prompt:
+                </p>
+                <div className="bg-secondary/30 p-3 rounded-md border border-border text-sm">
+                  {standardPrompt}
+                </div>
+              </div>
+            </div>
+            
+            <div className="flex items-start space-x-2">
+              <RadioGroupItem value="custom" id="custom-prompt" />
+              <div className="grid gap-1.5 w-full">
+                <Label htmlFor="custom-prompt" className="font-medium">
+                  Use Custom Prompt
+                </Label>
+                <p className="text-sm text-muted-foreground">
+                  Provide a custom prompt for the AI trainer to better understand how to respond to students.
+                </p>
+                <Textarea
+                  value={customPrompt}
+                  onChange={(e) => setCustomPrompt(e.target.value)}
+                  placeholder="Write a custom prompt for the AI trainer..."
+                  disabled={promptType !== 'custom'}
+                  className={cn(
+                    "min-h-[120px]",
+                    promptType !== 'custom' && "opacity-60"
+                  )}
+                />
+              </div>
+            </div>
+          </RadioGroup>
+          
+          <div className="text-sm text-muted-foreground mt-2 flex items-start gap-2">
+            <div className="h-5 w-5 flex-shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 16v-4" />
+                <path d="M12 8h.01" />
+              </svg>
+            </div>
+            <p>
+              The prompt helps guide how the AI responds to students. A good prompt clearly defines the AI's role,
+              tone, and constraints when interacting with course content.
+            </p>
           </div>
         </div>
       </div>
@@ -370,3 +465,4 @@ const CourseForm = () => {
 };
 
 export default CourseForm;
+
