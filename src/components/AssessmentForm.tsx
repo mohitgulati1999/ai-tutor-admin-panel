@@ -19,6 +19,10 @@ type Question = {
   correctAnswer?: string;
 };
 
+type AssessmentFormProps = {
+  initialData?: any;
+};
+
 const mockCourses = [
   { id: '1', title: 'Introduction to Natural Language Processing' },
   { id: '2', title: 'Advanced Machine Learning Algorithms' },
@@ -34,10 +38,10 @@ const mockTopics = [
   { id: '6', courseId: '3', title: 'Backpropagation' },
 ];
 
-const AssessmentForm = () => {
-  const [assessmentTitle, setAssessmentTitle] = useState('');
-  const [selectedCourse, setSelectedCourse] = useState('');
-  const [selectedTopic, setSelectedTopic] = useState('');
+const AssessmentForm = ({ initialData }: AssessmentFormProps) => {
+  const [assessmentTitle, setAssessmentTitle] = useState(initialData?.title || '');
+  const [selectedCourse, setSelectedCourse] = useState(initialData?.courseId || '');
+  const [selectedTopic, setSelectedTopic] = useState(initialData?.topicId || '');
   const [questions, setQuestions] = useState<Question[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
