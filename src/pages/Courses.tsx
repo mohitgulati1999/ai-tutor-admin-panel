@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
@@ -89,7 +88,7 @@ const Courses = () => {
 
       {isCreating ? (
         <div className="space-y-6">
-          <CourseForm initialData={editingCourse} />
+          <CourseForm />
           <div className="flex justify-start">
             <Button 
               variant="outline" 
