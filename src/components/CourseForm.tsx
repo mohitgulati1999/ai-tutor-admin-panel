@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils';
 
 type ContentType = 'text' | 'file';
 type MediaFile = File | null;
+type MediaType = 'download' | 'link'; // Define a specific type for media types
 
 type SubTopic = {
   id: string;
@@ -19,7 +20,7 @@ type SubTopic = {
   content: string;
   file: MediaFile;
   videoFile: MediaFile;
-  mediaFiles: { id: string; file: MediaFile; title: string; type: 'download' | 'link'; url: string }[];
+  mediaFiles: { id: string; file: MediaFile; title: string; type: MediaType; url: string }[];
 };
 
 type Topic = {
@@ -149,13 +150,13 @@ const CourseForm = () => {
     
     const newMediaFiles = [
       ...subTopic.mediaFiles,
-      { id: crypto.randomUUID(), file: null, title: '', type: 'download', url: '' }
+      { id: crypto.randomUUID(), file: null, title: '', type: 'download' as MediaType, url: '' }
     ];
     
     updateSubTopic(topicId, subTopicId, { mediaFiles: newMediaFiles });
   };
 
-  const updateMediaFile = (topicId: string, subTopicId: string, mediaId: string, updates: Partial<{file: MediaFile, title: string, type: 'download' | 'link', url: string}>) => {
+  const updateMediaFile = (topicId: string, subTopicId: string, mediaId: string, updates: Partial<{file: MediaFile, title: string, type: MediaType, url: string}>) => {
     const topic = topics.find(t => t.id === topicId);
     if (!topic) return;
     
