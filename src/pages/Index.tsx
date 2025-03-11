@@ -24,8 +24,8 @@ const Index = () => {
       <PageHeader 
         title={isAdmin ? "Admin Dashboard" : "Student Dashboard"}
         subtitle={isAdmin 
-          ? "Welcome to the AI Trainer admin dashboard" 
-          : "Welcome to your AI Trainer learning platform"
+          ? "Welcome to the ZeLearn AI admin dashboard" 
+          : "Welcome to your ZeLearn AI learning platform"
         }
       />
 

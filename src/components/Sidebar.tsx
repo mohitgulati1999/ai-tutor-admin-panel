@@ -107,7 +107,7 @@ const Sidebar = () => {
         <div className="flex items-center justify-between h-16 px-4">
           <div className={cn("flex items-center", expanded ? "justify-between w-full" : "justify-center")}>
             {expanded && (
-              <h1 className="text-xl font-bold text-gradient">AI Trainer</h1>
+              <h1 className="text-xl font-bold text-gradient">ZeLearn AI</h1>
             )}
             <button
               onClick={() => setExpanded(!expanded)}
