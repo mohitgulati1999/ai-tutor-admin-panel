@@ -14,7 +14,8 @@ import {
   User,
   Award,
   BookMarked,
-  Bell
+  Bell,
+  ClipboardList
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -63,11 +64,11 @@ const Sidebar = () => {
     { path: '/candidates', name: 'Candidates', icon: <Users className="h-5 w-5" /> },
   ];
 
-  // Get student navigation items
+  // Get student navigation items - update to use "Assessment Reports" instead of "Assessments"
   const getStudentNavItems = () => [
     { path: '/', name: 'Dashboard', icon: <Home className="h-5 w-5" /> },
     { path: '/courses', name: 'My Courses', icon: <BookOpen className="h-5 w-5" /> },
-    { path: '/assessments', name: 'Assessments', icon: <FileText className="h-5 w-5" /> },
+    { path: '/assessment-reports', name: 'Assessment Reports', icon: <ClipboardList className="h-5 w-5" /> },
     { path: '/progress', name: 'Progress', icon: <Award className="h-5 w-5" /> },
   ];
 
