@@ -15,10 +15,7 @@ import {
   Award,
   BookMarked,
   Bell,
-  ClipboardList,
-  ChevronDown,
-  UserPlus,
-  FileBar
+  ClipboardList
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -64,15 +61,7 @@ const Sidebar = () => {
     { path: '/', name: 'Dashboard', icon: <Home className="h-5 w-5" /> },
     { path: '/courses', name: 'Courses', icon: <BookOpen className="h-5 w-5" /> },
     { path: '/assessments', name: 'Assessments', icon: <FileText className="h-5 w-5" /> },
-    { 
-      name: 'Candidates', 
-      icon: <Users className="h-5 w-5" />,
-      isDropdown: true,
-      subItems: [
-        { path: '/enrollments', name: 'Enrollments', icon: <UserPlus className="h-5 w-5" /> },
-        { path: '/candidates', name: 'Reports', icon: <FileBar className="h-5 w-5" /> }
-      ]
-    },
+    { path: '/candidates', name: 'Candidates', icon: <Users className="h-5 w-5" /> },
   ];
 
   // Get student navigation items - update to use "Assessment Reports" instead of "Assessments"
@@ -131,85 +120,31 @@ const Sidebar = () => {
 
         <nav className="flex-1 py-4 overflow-y-auto scrollbar-none">
           <ul className="space-y-2 px-2">
-            {navItems.map((item, index) => (
-              <li key={item.name + index}>
-                {item.isDropdown ? (
-                  <div className="relative">
-                    <button
-                      className={cn(
-                        "flex items-center justify-between w-full p-3 rounded-lg transition-all duration-200 group",
-                        location.pathname.includes('/candidates') || location.pathname.includes('/enrollments')
-                          ? "bg-primary/20 text-primary-foreground" 
-                          : "hover:bg-secondary/80"
-                      )}
-                    >
-                      <div className="flex items-center">
-                        {item.icon}
-                        {expanded && <span className="ml-3 text-sm font-medium">{item.name}</span>}
-                      </div>
-                      {expanded && <ChevronDown size={16} />}
-                    </button>
-                    
-                    {expanded && (
-                      <div className="pl-8 mt-1 space-y-1">
-                        {item.subItems?.map((subItem) => (
-                          <Link
-                            key={subItem.path}
-                            to={subItem.path}
-                            className={cn(
-                              "flex items-center p-2 rounded-lg transition-all duration-200 group",
-                              location.pathname === subItem.path 
-                                ? "bg-primary/10 text-primary-foreground" 
-                                : "hover:bg-secondary/60"
-                            )}
-                          >
-                            {subItem.icon}
-                            <span className="ml-3 text-sm font-medium">{subItem.name}</span>
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                    
-                    {!expanded && (
-                      <div className="fixed left-20 ml-6 mt-1 p-2 rounded-md bg-secondary opacity-0 -translate-x-3 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 z-50">
-                        {item.subItems?.map((subItem) => (
-                          <Link
-                            key={subItem.path}
-                            to={subItem.path}
-                            className="flex items-center p-2 rounded-lg hover:bg-secondary/60"
-                          >
-                            {subItem.icon}
-                            <span className="ml-3 text-sm font-medium">{subItem.name}</span>
-                          </Link>
-                        ))}
-                      </div>
-                    )}
+            {navItems.map((item) => (
+              <li key={item.path}>
+                <Link
+                  to={item.path}
+                  className={cn(
+                    "flex items-center p-3 rounded-lg transition-all duration-200 group",
+                    location.pathname === item.path 
+                      ? "bg-primary/20 text-primary-foreground" 
+                      : "hover:bg-secondary/80"
+                  )}
+                >
+                  <div className="flex items-center justify-center">
+                    {item.icon}
                   </div>
-                ) : (
-                  <Link
-                    to={item.path!}
-                    className={cn(
-                      "flex items-center p-3 rounded-lg transition-all duration-200 group",
-                      location.pathname === item.path 
-                        ? "bg-primary/20 text-primary-foreground" 
-                        : "hover:bg-secondary/80"
-                    )}
-                  >
-                    <div className="flex items-center justify-center">
-                      {item.icon}
-                    </div>
-                    
-                    {expanded && (
-                      <span className="ml-3 text-sm font-medium">{item.name}</span>
-                    )}
-                    
-                    {!expanded && (
-                      <span className="fixed left-20 ml-6 p-2 rounded-md bg-secondary text-sm font-medium opacity-0 -translate-x-3 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
-                        {item.name}
-                      </span>
-                    )}
-                  </Link>
-                )}
+                  
+                  {expanded && (
+                    <span className="ml-3 text-sm font-medium">{item.name}</span>
+                  )}
+                  
+                  {!expanded && (
+                    <span className="fixed left-20 ml-6 p-2 rounded-md bg-secondary text-sm font-medium opacity-0 -translate-x-3 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                      {item.name}
+                    </span>
+                  )}
+                </Link>
               </li>
             ))}
           </ul>
